@@ -29,12 +29,12 @@ class DDPG():
 
         # Noise process
         self.exploration_mu = 0
-        self.exploration_theta = 0.15
+        self.exploration_theta = 0.2
         self.exploration_sigma = 0.2
         self.noise = OUNoise(self.action_size, self.exploration_mu, self.exploration_theta, self.exploration_sigma)
 
         # Replay memory
-        self.buffer_size = 100000
+        self.buffer_size = 10000
         self.batch_size = 64
         self.memory = ReplayBuffer(self.buffer_size, self.batch_size)
 
@@ -45,6 +45,8 @@ class DDPG():
         self.best_score = -np.inf
         self.total_reward = 0.0
         self.score = 0.0
+
+        self.learn_count = 0
         self.reset_episode()
 
     def reset_episode(self):
@@ -69,6 +71,7 @@ class DDPG():
         # Learn, if enough samples are available in memory
         if len(self.memory) > self.batch_size:
             experiences = self.memory.sample()
+            self.learn_count+=1
             self.learn(experiences)
 
         # Roll over last state and action

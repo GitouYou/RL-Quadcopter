@@ -80,8 +80,10 @@ class TakeOff():
         """Uses current pose of sim to return reward."""
         #total_effort_up = (self.target_pos[2] - self.sim.pose[2])
         #reward = total_effort_up #1.-.3*(abs(self.sim.pose[:3] - self.target_pos)).sum()
-        reward = 10.-.5*(abs(self.sim.pose[:3] - self.target_pos)).sum()  
-        reward = max(1, min(-1, reward))
+        #reward = 1.-.3*(abs(self.sim.pose[:3] - self.target_pos)).sum()  
+        #reward = max(1, min(-1, reward))
+        reward = np.tanh(1 - 0.003*(abs(self.sim.pose[:3] - self.target_pos))).sum()
+        
         return reward
 
     def step(self, rotor_speeds):
@@ -92,8 +94,8 @@ class TakeOff():
             done = self.sim.next_timestep(rotor_speeds) # update the sim pose and velocities
             reward += self.get_reward() 
             pose_all.append(self.sim.pose)
-            if done:
-                reward +=10 
+            # if done:
+            #     reward +=10 
         next_state = np.concatenate(pose_all)
         return next_state, reward, done
 
