@@ -44,7 +44,7 @@ class Critic:
 
         self.model = models.Model(inputs=[states,actions],outputs=Q_values)
 
-        optimizer = optimizers.Adam()
+        optimizer = optimizers.Adam(lr=0.001)
         self.model.compile(optimizer=optimizer,loss='mse')
 
         action_gradients = K.gradients(Q_values,actions)

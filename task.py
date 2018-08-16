@@ -82,8 +82,10 @@ class TakeOff():
         #reward = total_effort_up #1.-.3*(abs(self.sim.pose[:3] - self.target_pos)).sum()
         #reward = 1.-.3*(abs(self.sim.pose[:3] - self.target_pos)).sum()  
         #reward = max(1, min(-1, reward))
-        reward = np.tanh(1 - 0.003*(abs(self.sim.pose[:3] - self.target_pos))).sum()
         
+        
+        #reward = np.tanh(1 - 0.003*(abs(self.sim.pose[:3] - self.target_pos))).sum()
+        reward = 5*self.sim.v[2] -abs(self.sim.pose[2]-self.target_pos[2])
         return reward
 
     def step(self, rotor_speeds):
